@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="MaskHarness-WAM: Instance-Grounded Harnessing for Long-Horizon Robot Manipulation">
+  <meta name="keywords" content="MaskHarness-WAM, robot manipulation, embodied harness, world action models">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MaskHarness-WAM: Instance-Grounded Harnessing for Long-Horizon Robot Manipulation</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+</head>
+<body>
+
+<section class="hero publication-header">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">MaskHarness-WAM: Instance-Grounded Harnessing for Long-Horizon Robot Manipulation</h1>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Zitai Huang<sup>1,2,*</sup></span>
+            <span class="author-block">Taiyi Su<sup>2,*</sup></span>
+            <span class="author-block">Jian Zhu<sup>2,&dagger;</sup></span>
+            <span class="author-block">Jianjun Zhang<sup>1,2</sup></span>
+            <span class="author-block">Chong Ma<sup>1,2</sup></span>
+            <span class="author-block">Tianbin Liu<sup>2</sup></span>
+            <span class="author-block">Weiyi Lu<sup>2</sup></span>
+            <br>
+            <span class="author-block">Yi Xu<sup>2,&Dagger;</sup></span>
+            <span class="author-block">Hanli Wang<sup>1,&Dagger;</sup></span>
+          </div>
+
+          <div class="publication-affiliations">
+            <span class="affiliation-block"><sup>1</sup>Tongji University</span>
+            <span class="affiliation-block"><sup>2</sup>AIRC, Midea Group</span>
+          </div>
+          <div class="publication-notes">
+            <span class="note-block"><sup>*</sup>Equal contribution</span>
+            <span class="note-block"><sup>&dagger;</sup>Project Leader</span>
+            <span class="note-block"><sup>&Dagger;</sup>Corresponding authors</span>
+          </div>
+          <div class="publication-links">
+            <span class="link-block">
+              <a href="https://arxiv.org/abs/2609.19974" class="external-link button is-normal is-rounded is-dark" target="_blank" rel="noopener noreferrer">
+                <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                <span>Paper</span>
+              </a>
+            </span>
+            <span class="link-block">
+              <a href="./" class="button is-normal is-rounded is-dark">
+                <span class="icon"><i class="fas fa-home"></i></span>
+                <span>Project</span>
+              </a>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser" id="demo-video">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <figure class="image">
+        <video controls autoplay muted loop playsinline preload="metadata">
+          <source src="./static/videos/maskharness-wam-demo.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="abstract">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>Long-horizon robot manipulation requires not only stable local visuomotor control, but also continuous target tracking and reliable task progress assessment throughout execution. This challenge becomes particularly critical when multiple objects share identical appearances and must be manipulated in a prescribed order. In such scenarios, relying solely on a limited-horizon manipulation policy is often insufficient to determine which instance should be operated on and when the task should transition to the next stage. To address this challenge, we propose MaskHarness-WAM, an instance-grounded harness for long-horizon manipulation. The proposed system connects high-level task planning with low-level manipulation policies through target masks, while leveraging visual feedback for subtask scheduling and continuous execution. Since each subtask corresponds to a different target instance, the low-level policy requires a newly established initial target mask under the updated scene at each subtask transition. The harness continuously re-observes the environment, generates, and verifies the target mask at subtask boundaries, thereby updating the instance-level spatial condition provided to the low-level policy. Furthermore, the system advances the manipulation process by switching target instances according to the verified completion status of each subtask. Experiments on a real robot platform demonstrate that MaskHarness-WAM substantially outperforms limited-horizon policies on sequential multi-object manipulation, showing its effectiveness in extending local manipulation skills to reliable long-horizon execution.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section publication-body">
+  <div class="container is-max-desktop">
+    <div id="introduction" class="project-section">
+      <h3 class="title is-4">Introduction</h3>
+      <div class="content has-text-justified">
+        <p>Reliable execution of long-horizon instructions remains a fundamental goal toward general-purpose robot manipulation. In real-world scenarios such as industrial assembly, warehouse fulfillment, and laboratory automation, robots are often required to manipulate multiple objects with identical appearances in a prescribed order. For example, identical screws may need to be inserted into different holes sequentially, while visually indistinguishable test tubes must be transferred and inspected according to their sample identities. Although these objects share similar categories and visual appearances, they are not interchangeable within the task. Reliable execution of such procedures is therefore a critical step toward enabling robots to move beyond isolated skills and autonomously complete real-world workflows.</p>
+        <p>We propose <em>MaskHarness-WAM</em>, an instance-grounded harness for long-horizon sequential manipulation. The key idea is to augment a mask-conditioned world action model enhanced with instance-level grounding with an external closed-loop harness. MaskHarness-WAM consists of two tightly coupled components: a task-level harness and a mask-conditioned WAM policy with instance-level grounding. Given a language instruction, the harness decomposes the task into an ordered sequence of subtasks and maintains the execution state, including the active target instance and completed instances. Before each WAM invocation, the harness grounds the current target instance into an instance-level visual condition by generating and verifying a target mask from the current observation. Only verified masks are provided to the WAM, preventing incorrect target binding from propagating into action generation.</p>
+        <p>The key insight of MaskHarness-WAM is to treat the target mask as a dynamic instance-level interface between task management and manipulation execution. Unlike approaches that provide a single visual prompt for an entire task, our harness updates the target condition at every subtask transition. The completion of one subtask triggers a new target selection and mask generation for the next stage, allowing the same low-level policy to operate on different instances throughout a long-horizon sequence.</p>
+      </div>
+      <div class="content has-text-centered">
+        <figure class="image project-figure overview-figure">
+          <img src="./static/images/fig1.png" alt="MaskHarness-WAM task-level closed-loop overview" loading="lazy">
+        </figure>
+      </div>
+    </div>
+
+    <div id="method" class="project-section">
+      <h3 class="title is-4">Method</h3>
+      <div class="content has-text-justified">
+        <p>MaskHarness-WAM uses a mask-conditioned world action model as the low-level execution primitive. The policy takes multi-view RGB observations, robot proprioceptive states, a local manipulation instruction, and a target mask, and outputs a finite-horizon bimanual action chunk A<sub>1:H</sub> &isin; &#8477;<sup>H&times;14</sup>, where H denotes the action horizon and each action vector has 14 dimensions corresponding to the 7-DoF control of each of the two robot arms. Our focus is not to redesign the underlying WAM, but to enable its reliable reuse across long-horizon tasks by dynamically providing a verified instance-level target condition through the harness.</p>
+        <p>MaskHarness-WAM introduces a task-level closed loop around the low-level manipulation policy. The harness handles task decomposition, state tracking, visual evaluation, recovery, and execution scheduling, while continuous robot actions are generated entirely by the reusable low-level policy. Its role is to determine which subtask should be executed, which object instance should be grounded, and when the system should advance to the next stage. This separation allows a finite-horizon manipulation policy to be composed into feedback-driven long-horizon execution.</p>
+        <p>Each subtask is controlled by two visual gates: an <em>entry gate</em> for target verification and an <em>exit gate</em> for completion assessment. Both gates are implemented with a vision-language model. At the entry gate, the candidate target mask is overlaid on the full head-view image. The evaluator checks whether the highlighted region corresponds to the target instance specified by the current subtask. Only a verified mask is passed to the low-level policy, preventing incorrect instance grounding from propagating into action generation.</p>
+      </div>
+      <div class="content has-text-centered">
+        <figure class="image project-figure model-figure">
+          <img src="./static/images/fig2.png" alt="Framework of MaskHarness-WAM" loading="lazy">
+          <figcaption>Framework of MaskHarness-WAM.</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div id="main-results" class="project-section">
+      <h3 class="title is-4">Main Results</h3>
+      <div class="content has-text-justified">
+        <p>We evaluate MaskHarness-WAM on a real ARX dual-arm 7-DoF robotic platform. The evaluation focuses on two sequential manipulation tasks: <strong>1) block</strong> and <strong>2) test-tube</strong>. For both tasks, the training set contains only 4-instance demonstrations. Each 4-instance task admits 24 possible execution orders. The training set covers 18 orders for blocks and 15 orders for test tubes, while the remaining orders are reserved for evaluation.</p>
+        <p>Across all six settings, MaskHarness-WAM achieves the highest SR and PR while maintaining stable performance across different instance scales. For block tasks, SR reaches 88.0%, 84.0%, and 84.0% under the 3-, 4-, and 5-instance settings, respectively; for test tube tasks, SR reaches 96.0%, 88.0%, and 88.0%. The lowest PR across the six settings is 91.2%. Performance therefore holds up under both task-scale variations and unseen execution orders.</p>
+      </div>
+      <div class="content has-text-centered">
+        <figure class="image project-figure rollout-figure">
+          <img src="./static/images/fig3.png" alt="Real-robot sequential manipulation of blocks and test tubes" loading="lazy">
+          <figcaption>Real-robot sequential manipulation.</figcaption>
+        </figure>
+        <figure class="image project-table table-main">
+          <img src="./static/images/tab1.png" alt="Sequential manipulation results across three, four, and five instances" loading="lazy">
+          <figcaption>Sequential manipulation results (%).</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div id="ood" class="project-section">
+      <h3 class="title is-4">Out-of-Distribution Generalization</h3>
+      <div class="content has-text-justified">
+        <p>We further evaluate MaskHarness-WAM under out-of-distribution (OOD) visual conditions, where the task structure is preserved but the visual distribution differs from training. We consider three OOD settings. (1) Appearance Shift: the robot sequentially manipulates blocks with unseen colors, isolating changes in target appearance. (2) Scene Composition Shift: the robot manipulates bread objects in a mixed scene containing two blocks and two bread instances, introducing an unseen category composition together with distractors. (3) Appearance-and-Geometry Shift: the robot sequentially manipulates red cuboids among blue block distractors, jointly changing target color and geometry.</p>
+        <p>Under Scene Composition Shift, MaskHarness-WAM completes 11 of 12 trials, achieving 91.7% SR and 95.8% PR. In comparison, MaskWAM, Fast-WAM, and &pi;<sub>0</sub> achieve 41.7%/70.8%, 0.0%/12.5%, and 8.3%/25.0%, respectively. While MaskWAM preserves partial progress in several trials, it is less reliable in maintaining correct target selection and task progression through the full sequence.</p>
+      </div>
+      <div class="content has-text-centered">
+        <figure class="image project-figure generalization-figure">
+          <img src="./static/images/fig4.png" alt="OOD and zero-shot generalization settings" loading="lazy">
+          <figcaption>OOD and zero-shot generalization settings.</figcaption>
+        </figure>
+        <figure class="image project-table table-ood">
+          <img src="./static/images/tab2.png" alt="OOD generalization under three visual distribution shifts" loading="lazy">
+          <figcaption>OOD generalization under three types of visual distribution shift (SR/PR, %).</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div id="zero-shot" class="project-section last-section">
+      <h3 class="title is-4">Zero-Shot Generalization</h3>
+      <div class="content has-text-justified">
+        <p>We further evaluate MaskHarness-WAM in two zero-shot settings without additional training or task-specific fine-tuning: Single-Step Transfer and Unseen-Category Transfer.</p>
+        <p>Under Single-Step Transfer, MaskHarness-WAM successfully selects the specified target, completes the manipulation, and terminates correctly in all 4 trials, achieving 100.0% SR and PR. In contrast, none of the three baselines completes the task successfully. This result shows that the harness can adapt the execution structure from multi-step training tasks to a single-step instruction without additional training.</p>
+        <p>Under Unseen-Category Transfer, MaskHarness-WAM achieves 68.0% SR and 77.0% PR, compared with 16.7%/34.4% for MaskWAM, 4.2%/12.5% for Fast-WAM, and 0.0%/4.2% for &pi;<sub>0</sub>. Despite the complete absence of bread objects during training, MaskHarness-WAM maintains reliable instance grounding and ordered task progression across the four-step sequence.</p>
+      </div>
+      <div class="content has-text-centered">
+        <figure class="image project-table table-zero-shot">
+          <img src="./static/images/tab3.png" alt="Zero-shot generalization results" loading="lazy">
+          <figcaption>Zero-shot generalization under Single-Step Transfer and Unseen-Category Transfer (SR/PR, %).</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

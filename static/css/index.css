@@ -1,0 +1,144 @@
+body {
+  font-family: 'Noto Sans', sans-serif;
+}
+
+.publication-header .hero-body {
+  padding-top: 4rem;
+  padding-bottom: 2rem;
+}
+
+.publication-title {
+  font-family: 'Google Sans', sans-serif;
+  line-height: 1.15;
+}
+
+.publication-authors {
+  font-family: 'Google Sans', sans-serif;
+  margin-top: 1rem;
+}
+
+.author-block {
+  display: inline-block;
+  margin: 0 0.35rem;
+}
+
+.publication-affiliations,
+.publication-notes {
+  font-family: 'Google Sans', sans-serif;
+  margin-top: 0.6rem;
+}
+
+.affiliation-block,
+.note-block {
+  display: inline-block;
+  margin: 0 0.5rem;
+}
+
+.publication-notes {
+  font-size: 0.95rem;
+}
+
+.publication-links {
+  margin-top: 1.25rem;
+}
+
+.link-block a {
+  margin: 5px;
+}
+
+.teaser .hero-body {
+  padding-top: 0;
+  padding-bottom: 3rem;
+}
+
+.teaser video {
+  border-radius: 10px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  display: block;
+  height: auto;
+  margin: auto;
+  max-width: 760px;
+  width: 100%;
+}
+
+.project-section {
+  margin-bottom: 3rem;
+}
+
+.last-section {
+  margin-bottom: 1rem;
+}
+
+.project-figure,
+.project-table {
+  margin: 1.5rem auto 2rem;
+}
+
+.project-figure img,
+.project-table img {
+  display: block;
+  height: auto;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+.project-figure figcaption,
+.project-table figcaption {
+  color: #555;
+  font-size: 0.95rem;
+  margin-top: 0.75rem;
+}
+
+.overview-figure img,
+.model-figure img,
+.rollout-figure img,
+.generalization-figure img {
+  width: 100%;
+}
+
+.rollout-figure,
+.generalization-figure {
+  margin: 0.5rem auto;
+}
+
+.table-main img {
+  width: 64%;
+}
+
+.table-ood img {
+  width: 72%;
+}
+
+.table-zero-shot img {
+  width: 81%;
+}
+
+@media screen and (max-width: 768px) {
+  .publication-title {
+    font-size: 2rem !important;
+  }
+
+  .content.has-text-justified {
+    text-align: left !important;
+  }
+
+  .project-table {
+    overflow-x: auto;
+  }
+
+  .table-main img,
+  .table-ood img,
+  .table-zero-shot img {
+    max-width: none;
+    width: 680px;
+  }
+
+  .table-main img,
+  .table-ood img {
+    width: 544px;
+  }
+
+  .table-zero-shot img {
+    width: 612px;
+  }
+}
